@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+{% block title %}借閱紀錄{% endblock %}
+{% block content %}
+{% load static %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1>借閱紀錄</h1>
+    <div>
+        <button type="submit" class="btn btn-outline-primary" onclick="window.location.href='{% url 'Book' %}'">回書籍查詢</button>
+    </div>
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+      <tr align="center">
+
+        <th scope="col">借閱日期</th>
+        <th scope="col">借閱人編號</th>
+        <th scope="col">借閱人姓名</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for lend_record in lend_records %}
+            <tr align="center">
+                <td>{{ lend_record.borrow_date|date:"Y/m/d"}}</td>
+                <td>{{ lend_record.borrow.id }}</td>
+                <td>{{ lend_record.borrow }}</td>
+               
+            </tr>
+        {% endfor %}
+    </tbody> 
+</table> 
+{% endblock %}

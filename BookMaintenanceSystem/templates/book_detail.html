@@ -1,0 +1,60 @@
+{% extends "base.html"%}
+{% block title %}書籍詳細資料{% endblock %}
+{% block content %}
+{% load static %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1>書籍維護</h1>
+    <div>
+        <button type="submit" class="btn btn-outline-primary" onclick="window.location.href='{% url 'Book' %}'">回書籍查詢</button>
+    </div>
+</div>
+
+
+    <form class="row g-3">
+        <div class="col-md-12">
+          <label for="inputEmail4" class="form-label">書名</label>
+          <input type="text" class="form-control" id="inputEmail4" value="{{book.name}} " readonly>
+        </div>
+        <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">書籍類別</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{book.category.category_name}}" readonly>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">作者</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{book.author}}" readonly>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">出版社</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{book.publisher}}" readonly>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">出版日期</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{book.publisher_date}}" readonly>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">內容簡介</label>
+            <textarea class="form-control" id="inputEmail4" style="height: 250px"  readonly>{{book.summary}} </textarea>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">價格</label>
+            <input type="number" class="form-control" id="inputEmail4" value="{{book.price|default:""}}" readonly>
+          </div>
+          <script src="{% static "js/why e.js"%}"></script>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">借閱人</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{keeper_name}}" readonly>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">借閱狀態</label>
+            <input type="text" class="form-control" id="inputEmail4" value="{{book.status.code_name}}" readonly> 
+          </div>
+
+          <div class="col-12">
+            <br>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-success" onclick="window.location.href='{% url 'BookEdit' book.id %}'">修改</button>
+            </div>
+        </div> 
+    </form>
+
+    {% endblock %}

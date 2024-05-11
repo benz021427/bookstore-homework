@@ -1,0 +1,126 @@
+{%extends "base.html"%}
+{%block title%}書籍管理{%endblock%}
+{%block content%}
+{% load static %}
+
+</br>
+
+<h1>書籍查詢</h1>
+
+<div class="p-4 mb-2 text-dark lookup-form-bg">
+<form class="row g-2" action="{% url 'Book' %}" method="POST" name="form1">
+  {% csrf_token %}
+    <div class="col-12">
+      <label for="bookName" class="form-label"><strong>書名</strong></label>
+      <input type="text" class="form-control" id="bookName", name="book_name">
+    </div>
+    <div class="col-md-6">
+        <label for="category_id" class="form-label"><strong>書籍類別</strong></label>
+        <select id="category_id" class="form-select" name="category_id">
+          <option value=""><strong>----------------書籍類別----------------</strong></option>
+          {% for category_id, category_name in categories %}
+            <option value="{{ category_id }}">{{ category_name }}</option>
+          {% endfor %}
+        </select> 
+    </div>
+    <div class="col-md-6">
+        <label for="borrower_id" class="form-label"><strong>借閱人</strong></label>
+        <select id="borrower_id" class="form-select" name="borrower_id">
+          <option value=""><strong>----------------借閱人---------------</strong></option>
+          {% for borrower_id, username in usernames %}
+            <option value="{{ borrower_id }}">{{ username }}</option>
+          {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label for="book_status" class="form-label"><strong>借閱狀態</strong></label>
+        <select id="book_status" class="form-select" name="book_status">
+          <option value=""><strong>----------------借閱狀態----------------</strong></option>
+          {% for book_status, status in bookstatus %}
+            <option value="{{ book_status }}">{{ status }}</option>
+          {% endfor %}
+        </select>
+    </div>
+    <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary" type="submit">查詢</button>
+        <button class="btn btn-danger" type="reset">清除</button>
+        <button class="btn btn-success" type="button" onclick="window.location.href='{% url 'BookCreate' %}'">新增</button>
+      </div>
+    </div>
+   
+      
+  </form>
+</br>
+
+  <table class="table table-striped">
+    <thead>
+      <tr align="center">
+        <th scope="col">書籍類別</th>
+        <th scope="col">書名</th>
+        <th scope="col">出版日期</th>
+        <th scope="col">借閱狀態</th>
+        <th scope="col">借閱人</th>
+        <th colspan="3">操作</th>
+      </tr>
+    </thead>
+    <tbody> 
+        {% for book in books %}
+          <tr align="center">
+            <td>{{ book.category.category_name }}</td>
+            <td><a href="{% url 'BookDetail' book.id %}" style="text-decoration:none;">{{ book.name }}</a></td>
+            <td>{{ book.publisher_date }}</td>
+            <td>{{ book.status.code_name }}</td>
+            <td>
+              {% if book.keeper_id %}
+                {% for student in students %}
+                    {% if student.id == book.keeper_id %}
+                        {{ student.username }}
+                    {% endif %}
+                {% endfor %}
+              {% else %}
+                  -
+              {% endif %}
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary me-3"onclick="window.location.href='{% url 'BookRecord' book.id %}'" >借閱紀錄</button>
+                <button type="submit" class="btn btn-success me-3"onclick="window.location.href='{% url 'BookEdit' book.id %}'" >編輯</button>
+                <button type="button" class="btn btn-danger me-3" id="delete-book" data-book-id="{{ book.id }}" data-book-name="{{ book.name }}">刪除</button>
+            </td>
+
+
+          </tr>
+        {% endfor %}
+        <script>
+          $(document).ready(function(){
+            $(document).on('click', '#delete-book', function() {
+                  var bookId = $(this).data('book-id');
+                  var bookName = $(this).data('book-name');
+          
+                  // 發送 AJAX 請求
+                  $.ajax({
+                      type: "POST",
+                      url: "/book_delete/"+bookId,
+                      data: {
+                          csrfmiddlewaretoken: '{{ csrf_token }}',
+                      },
+                      success: function(response){
+                          
+                          if (response.message ==="success") {
+                              alert("書籍 '" + bookName + "' 已刪除！");
+                              window.location.href="/book/";
+                          } else if (response.message ==="error") {
+                              alert("書籍 '" + bookName + "' 無法刪除。");
+                          }
+                      },
+                      error: function(xhr, status, error) {
+                          // 處理錯誤情況
+                          alert("發生錯誤：" + error);
+                      }
+                  });
+              });
+          });
+          </script>
+
+      </tbody>
+    </table>
+  {% endblock %}

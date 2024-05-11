@@ -1,0 +1,11 @@
+.lookup-form-bg {
+    background-color: #f0f0f0;
+    border-radius: 20px; /* 設置圓角半徑為 10 像素 */
+}
+
+
+td {
+    max-width: 200px; /* 將 200px 替換為您想要的最大寬度值 */
+    word-wrap: break-word;
+    white-space: normal;
+}

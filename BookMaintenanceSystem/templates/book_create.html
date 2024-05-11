@@ -1,0 +1,80 @@
+{% extends "base.html"%}
+{% block title %}書籍新增{% endblock %}
+{% block content %}
+{% load static %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1>書籍新增</h1>
+    <div>
+        <button type="submit" class="btn btn-outline-primary" onclick="window.location.href='{% url 'Book' %}'">回書籍查詢</button>
+    </div>
+</div>
+ 
+    <div class="p-4 mb-2 text-dark lookup-form-bg">
+    <form class="row g-2" action="{% url 'BookCreate' %}" method="POST" name="form2">
+        {% csrf_token %}
+        <div class="col-md-12">
+          <label for="inputEmail4" class="form-label">書名</label>
+          <input type="text" class="form-control" id="bookname" name="book_name" required >
+        </div>
+        <div class="col-md-12">
+            <label for="inputState" class="form-label"><span style="color:red;">* </span>書籍類別</label>
+            <select id="inputState" class="form-select" name="category_id" required>
+              <option value="{{category_name}}">----------------</option>
+              {% for category_id, category_name in categories %}
+                <option value="{{ category_id }}">{{ category_name }}</option>
+              {% endfor %}
+            </select> 
+        </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">作者</label>
+            <input type="text" class="form-control" id="inputEmail4" name="book_author" >
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">出版社</label>
+            <input type="text" class="form-control" id="inputEmail4" name="publisher">
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">出版日期</label>
+            <input type="date" class="form-control" id="inputEmail4" name="publisher_date">
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">內容簡介</label>
+            <textarea class="form-control" placeholder="最多輸入1000字" id="inputEmail4" style="height: 250px"  name="book_summary"> </textarea>
+          </div>
+          <div class="col-md-12">
+            <label for="inputEmail4" class="form-label">價格</label>
+            <input type="number" class="form-control" id="inputEmail4" name="book_price" >
+          </div>
+          <script src="{% static "js/why e.js"%}"></script>
+
+          <div class="col-md-12">
+            <label for="borrower" class="form-label">借閱人</label>
+            <select id="borrower" class="form-select" name="borrower_id" >
+              <option value="">---------</option>
+              {% for borrower_id, username in usernames %}
+                <option value="{{ borrower_id }}">{{ username }}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-12">
+            <label for="status" class="form-label"><span style="color:red;">* </span>借閱狀態</label>
+            <select id="status" class="form-select" name="book_status" required>
+            <option value="">---------</option>
+            {% for code_id, code_name in bookstatus %}
+                <option value="{{ code_id }}">{{ code_name }}</option>
+            {% endfor %}
+            </select>
+<script src="{% static "js/YBN.js" %}"></script>
+
+    </div>
+
+    <div class="col-12">
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-success">新增</button>
+        </div>
+    </div> 
+    </form>
+</div>
+
+    {% endblock %}
